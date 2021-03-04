@@ -1,0 +1,53 @@
+<template>
+    <template if:true={displaySpinner}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template>
+
+    <lightning-card>
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="4">
+            <div class="sldx-inline">
+                <lightning-icon icon-name="standard:avatar" size="small" class="slds-m-left_small slds-m-right_small"></lightning-icon>
+                    <lightning-formatted-text class="slds-page-header__title" value="Financial Services Account Listing"></lightning-formatted-text>
+            </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="8">
+                <div class="slds-float_right slds-m-right_medium">
+                    <lightning-button-icon
+                            icon-name="utility:refresh"
+                            class="slds-m-right_x-small"
+                            onclick={refreshAccountList}
+                            alternative-text="Refresh">
+                    </lightning-button-icon>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" class="slds-m-left_medium">
+                <div onkeyup={handleKeyUp}>
+                    <lightning-input
+                        name="Account Search"
+                        label="Account Search"
+                        type="search"
+                        placeholder='Enter String to Search'
+                    ></lightning-input>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <div class="slds-m-around_small">
+            <lightning-datatable
+                    key-field="Id"
+                    data={accountList}
+                    columns={columns}
+                    show-row-number-column
+                    hide-checkbox-column
+                    sorted-by={sortBy}
+                    sorted-direction={sortDirection}
+                    onsort={handleSortdata}
+                    wrap-text-max-lines="1"
+                    onsave={handleSave}
+                    errors={errors}
+                    draft-values={draftValues}>
+            </lightning-datatable>
+        </div>
+    </lightning-card>
+</template>

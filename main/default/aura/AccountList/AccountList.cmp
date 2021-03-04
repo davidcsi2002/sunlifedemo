@@ -1,0 +1,57 @@
+<aura:component implements="force:appHostable,lightning:isUrlAddressable,force:hasRecordId,flexipage:availableForAllPageTypes" controller="AccountController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}"/>
+
+    <aura:attribute name="industry" type="String" default="Financial Services"/>
+    <aura:attribute name="accountList" type="Account[]"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="draftValues" type="Object" default="[]"/>
+    <aura:attribute name="searchString" type="String" default=""/>
+
+    <aura:attribute name="sortedDirection" type="String" default=""/>
+    <aura:attribute name="sortedBy" type="String" default="createdDate"/>
+
+    <aura:attribute name="displaySpinner" type="boolean"/>
+    <aura:if isTrue="{!v.displaySpinner}">
+        <lightning:spinner alternativeText="Loading"  size="medium"/>
+    </aura:if>
+
+    <lightning:card>
+        <div class="slds-grid slds-page-header slds-wrap">
+            <div class="slds-col slds-size_8-of-12 sldx-inline">
+                <lightning:icon iconName="standard:avatar" size="small" class="slds-m-right_small"/>
+                <lightning:formattedText value="{!('Financial Services Account Listing (' + v.accountList.length + ')')}" class="slds-page-header__title"/>
+            </div>
+            <div class="slds-col slds-size_4-of-12 slds-text-align_right ">
+                <lightning:buttonIcon iconName="utility:refresh" class="slds-m-right_x-small"  alternativeText="Refresh" onclick="{!c.refresh}"/>
+            </div>
+
+            <div class="slds-col slds-size_4-of-12 slds-m-top_small">
+                <div onkeyup="{! c.handleKeyUp }">
+                    <lightning:input
+                        aura:id="account-search"
+                        name="Account Search"
+                        label="Account Search"
+                        type="search"
+                        placeholder='Enter String to Search'/>
+                </div>
+            </div>
+        </div>
+
+        <aura:if isTrue="{!v.accountList.length > 0}">
+            <div class ="slds-m-around_small">
+                <lightning:datatable
+                    keyField="Id"
+                    data="{! v.accountList }"
+                    columns="{! v.columns }"
+                    hideCheckboxColumn="true"
+                    showRowNumberColumn="true"
+                    sortedBy="{!v.sortedBy}"
+                    sortedDirection="{!v.sortedDirection}"
+                    onsort="{!c.updateColumnSorting}"
+                    draftValues="{! v.draftValues }"
+                    onsave="{! c.handleSaveEdition }"/>
+            </div>
+        </aura:if>
+    </lightning:card>
+</aura:component>
